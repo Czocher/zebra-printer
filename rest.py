@@ -12,13 +12,12 @@ import json
 
 
 class NotFoundException(Exception):
-    """Raised when there is no problem or tests for the problem
-    with a given name, or the Supervisor return no submission to judge."""
+    """Raised when there is no print request."""
     pass
 
 
 class UnauthorizedException(Exception):
-    """Raised when the Node is unauthorised to judge submissions."""
+    """Raised when the Node is unauthorised."""
     pass
 
 
