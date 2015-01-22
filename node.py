@@ -13,7 +13,7 @@ class Node(object):
             try:
                 printRequest = self.get_print_request()
             except NotFoundException:
-                logging.info("No submission to judge. Waiting...")
+                logging.info("No print request to print. Waiting...")
                 sleep(NODE['QUERY_TIME'])
                 continue
             except UnauthorizedException:

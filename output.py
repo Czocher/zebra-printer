@@ -1,4 +1,13 @@
 import settings
+from datetime import datetime
+from utils import remove_accents, which
+from subprocess import Popen, PIPE
+
+
+class UnsupportedOutputException(Exception):
+    """Raised when the system cannot use the given output."""
+    pass
+
 
 class Output(object):
 
@@ -29,10 +38,25 @@ class Output(object):
 class FileOutput(Output):
 
     def printRequest(self, printRequest):
-        raise NotImplementedError()
+        # TODO: Chdir?
+        fileName = "{}-{}-{}.ps".format(printRequest['author'],
+                                        printRequest['problem'],
+                                        datetime.now().isoformat())
+        command = 'a2ps --output="{}" --pretty-print="{}" --header="{}" \
+                --left-footer --footer --center-title="{}"'
+        command = command.format(
+            fileName,
+            printRequest['language'].lower().encode('utf-8'),
+            remove_accents(printRequest['contest'])
+        )
+        proc = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
+        proc.communicate(input=remove_accents(printRequest['source']))
+        proc.wait()
 
     def test(self):
-        raise NotImplementedError()
+        if which('a2ps') is None:
+            raise UnsupportedOutputException("a2ps is requred but \
+                                             does not exist on path")
 
 
 class PrinterOutput(Output):
@@ -42,4 +66,3 @@ class PrinterOutput(Output):
 
     def test(self):
         pass
-
