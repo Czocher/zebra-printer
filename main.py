@@ -21,8 +21,8 @@ logging.basicConfig(
 
 if __name__ == '__main__':
     # Test if the output is valid
-    with Output.new() as output:
-        output.test()
+    o = Output.new()
+    o.test()
 
     # Start the Node
     try:

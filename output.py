@@ -77,8 +77,8 @@ class FileOutput(Output):
 
     def test(self):
         if which('a2ps') is None:
-            raise UnsupportedOutputException("a2ps is required but \
-                                             does not exist on path")
+            raise UnsupportedOutputException("a2ps is required but "
+                                             "does not exist on path")
 
 
 class PrinterOutput(Output):
@@ -108,9 +108,11 @@ class PrinterOutput(Output):
         proc.wait()
 
     def test(self):
+        if settings.OUTPUT['PRINTER_NAME'] is '':
+            raise UnsupportedOutputException("PRINTER_NAME cannot be empty")
         if which('a2ps') is None:
-            raise UnsupportedOutputException("a2ps is required but \
-                                             does not exist on path")
+            raise UnsupportedOutputException("a2ps is required but "
+                                             "does not exist on path")
         else:
             decision = raw_input("Print test page? (y/n) ")
             if decision == 'y':

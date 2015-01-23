@@ -9,8 +9,8 @@ OUTPUT = {
     'DESTINATION': 'printer',
     # Absolute path to output directory for file output
     'OUTPUT_DIR': p('output/'),
-    # CUPS queue name (lpstat -p)
-    'PRINTER_NAME': 'aa'
+    # CUPS queue name (lpstat -v)
+    'PRINTER_NAME': ''
 }
 
 NODE = {
