@@ -36,7 +36,7 @@ class Output(object):
         return self
 
     def __exit__(self, *args, **kwargs):
-        return self
+        pass
 
 
 class FileOutput(Output):
