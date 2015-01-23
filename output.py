@@ -2,6 +2,7 @@ import settings
 import os
 import logging
 import errno
+import sys
 from datetime import datetime
 from utils import remove_accents, which
 from subprocess import Popen, PIPE
@@ -83,27 +84,45 @@ class FileOutput(Output):
 class PrinterOutput(Output):
 
     def printRequest(self, printRequest):
-        command = 'a2ps --output="{}" --pretty-print="{}" --header="{}" \
-                --left-footer --footer="{}" --center-title="{}" \
-                --line-numbers=1'
-
         if printRequest['problem'] is not None:
             title = printRequest['problem']
         else:
             title = "Source code"
 
-        command = command.format(
-            settings.OUTPUT['PRINTER_NAME'],
-            printRequest['language'].lower().encode('utf-8'),
-            remove_accents(printRequest['contest']),
-            printRequest['author'],
-            title
+        self.__print(
+            printer=settings.OUTPUT['PRINTER_NAME'],
+            language=printRequest['language'].lower().encode('utf-8'),
+            header=remove_accents(printRequest['contest']),
+            footer=printRequest['author'],
+            title=title,
+            source=remove_accents(printRequest['source'])
         )
+
+    def __print(self, printer, language, header, footer, title, source):
+        command = 'a2ps --printer="{}" --pretty-print="{}" --header="{}" \
+                --left-footer --footer="{}" --center-title="{}" \
+                --line-numbers=1'
+        command.format(printer, language, header, footer, title)
         proc = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
-        proc.communicate(input=remove_accents(printRequest['source']))
+        proc.communicate(input=source)
         proc.wait()
 
     def test(self):
         if which('a2ps') is None:
             raise UnsupportedOutputException("a2ps is required but \
                                              does not exist on path")
+        else:
+            decision = raw_input("Print test page? (y/n) ")
+            if decision == 'y':
+                self.__print(
+                    printer=settings.OUTPUT['PRINTER_NAME'],
+                    language='py',
+                    header='header',
+                    footer='footer',
+                    title='title',
+                    source='Hello, world!'
+                )
+                decision = raw_input("Continue? (y/n) ")
+                print decision
+                if decision == 'n':
+                    sys.exit(0)

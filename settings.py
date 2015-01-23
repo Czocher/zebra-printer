@@ -6,11 +6,11 @@ p = lambda *x: os.path.join(PROJECT_ROOT, *x)
 
 OUTPUT = {
     # Can be 'printer' or 'file'
-    'DESTINATION': 'file',
+    'DESTINATION': 'printer',
     # Absolute path to output directory for file output
     'OUTPUT_DIR': p('output/'),
     # CUPS queue name (lpstat -p)
-    'PRINTER_NAME': ''
+    'PRINTER_NAME': 'aa'
 }
 
 NODE = {
