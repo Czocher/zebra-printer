@@ -23,9 +23,14 @@ class Node(object):
 
             with Output.new() as output:
                 try:
+                    logging.info("Trying to print the request.")
                     output.printRequest(printRequest)
-                except:
+                except Exception as e:
+                    logging.error("There was an error "
+                                  "during printing:\n{}".format(e))
                     self.report_failure(printRequest)
+                    continue
+                logging.info("Succesfully printed the request.")
                 self.report_success(printRequest)
 
             logging.info("Waiting for next request.")
@@ -37,12 +42,10 @@ class Node(object):
 
     def report_success(self, printRequest):
         """Report printing success to the Supervisor."""
-        return RESTConnection.post_print_request(printRequest['id'], {'error': False})
+        return RESTConnection.post_print_request(printRequest['id'],
+                                                 {'error': False})
 
     def report_failure(self, printRequest):
         """Report printing failure to the Supervisor."""
-        return RESTConnection.post_print_request(printRequest['id'], {'error': True})
-
-
-
-
+        return RESTConnection.post_print_request(printRequest['id'],
+                                                 {'error': True})
