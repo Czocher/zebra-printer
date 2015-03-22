@@ -64,14 +64,14 @@ class FileOutput(Output):
 
         path = os.path.join(settings.OUTPUT['OUTPUT_DIR'], fileName)
 
-        command = command.format(
+        cmd = command.format(
             path,
             printRequest['language'].lower().encode('utf-8'),
             remove_accents(printRequest['contest']),
             printRequest['author'],
             title
         )
-        proc = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
+        proc = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
         proc.communicate(input=remove_accents(printRequest['source']))
         proc.wait()
 
@@ -102,8 +102,8 @@ class PrinterOutput(Output):
         command = 'a2ps --printer="{}" --pretty-print="{}" --header="{}" \
                 --left-footer --footer="{}" --center-title="{}" \
                 --line-numbers=1'
-        command.format(printer, language, header, footer, title)
-        proc = Popen(command, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
+        cmd = command.format(printer, language, header, footer, title)
+        proc = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
         proc.communicate(input=source)
         proc.wait()
 
