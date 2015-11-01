@@ -4,7 +4,7 @@ import logging
 import errno
 import sys
 from datetime import datetime
-from utils import remove_accents, which
+from utils import remove_accents, which, get_key_or_substitute
 from subprocess import Popen, PIPE
 
 
@@ -57,25 +57,12 @@ class FileOutput(Output):
                 --left-footer --footer="{}" --center-title="{}" \
                 --line-numbers=1'
 
-        if printRequest['problem'] is not None:
-            title = printRequest['problem']
-        else:
-            title = "Source code"
-
-        if printRequest['institute'] is not None:
-            institute = printRequest['institute']
-        else:
-            institute = ""
-
-        if printRequest['room'] is not None:
-            room = "room {}".format(printRequest['room'])
-        else:
-            room = ''
-
-        if printRequest['computer'] is not None:
-            computer = "computer {}".format(printRequest['computer'])
-        else:
-            computer = ''
+        title = get_key_or_substitute(printRequest, 'problem', "Source code")
+        institute = get_key_or_substitute(printRequest, 'institute', "")
+        team = get_key_or_substitute(printRequest, 'team', "")
+        room = "room " + get_key_or_substitute(printRequest, 'room', "?")
+        computer = "computer "\
+                + get_key_or_substitute(printRequest, 'computer',  "?")
 
         path = os.path.join(settings.OUTPUT['OUTPUT_DIR'], fileName)
 
@@ -83,8 +70,8 @@ class FileOutput(Output):
             path,
             printRequest['language'].lower().encode('utf-8'),
             remove_accents(printRequest['contest']),
-            printRequest['author'] + ' ' + institute + ' ' + room +
-                                     ' ' + computer,
+            printRequest['author'] + ' ' + institute + ' '  + team +
+                                     ' ' + room + ' ' + computer,
             title
         )
         proc = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
@@ -100,16 +87,19 @@ class FileOutput(Output):
 class PrinterOutput(Output):
 
     def printRequest(self, printRequest):
-        if printRequest['problem'] is not None:
-            title = printRequest['problem']
-        else:
-            title = "Source code"
+        title = get_key_or_substitute(printRequest, 'problem', "Source code")
+        institute = get_key_or_substitute(printRequest, 'institute', "")
+        team = get_key_or_substitute(printRequest, 'team', "")
+        room = "room " + get_key_or_substitute(printRequest, 'room', "?")
+        computer = "computer "\
+                + get_key_or_substitute(printRequest, 'computer',  "?")
 
         self.__print(
             printer=settings.OUTPUT['PRINTER_NAME'],
             language=printRequest['language'].lower().encode('utf-8'),
             header=remove_accents(printRequest['contest']),
-            footer=printRequest['author'],
+            footer=printRequest['author'] + ' ' + institute + ' ' + team +
+                                            ' ' + room + ' ' + computer,
             title=title,
             source=remove_accents(printRequest['source'])
         )
