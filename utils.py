@@ -1,4 +1,4 @@
-from unicodedata import normalize
+from unidecode import unidecode
 import os
 
 
@@ -22,5 +22,4 @@ def which(program):
 
 
 def remove_accents(input_str):
-    nkfd_form = normalize('NFKD', unicode(input_str))
-    return nkfd_form.encode('ASCII', 'ignore')
+    return unidecode(unicode(input_str))
