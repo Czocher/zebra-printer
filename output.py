@@ -62,13 +62,29 @@ class FileOutput(Output):
         else:
             title = "Source code"
 
+        if printRequest['institute'] is not None:
+            institute = printRequest['institute']
+        else:
+            institute = ""
+
+        if printRequest['room'] is not None:
+            room = "room {}".format(printRequest['room'])
+        else:
+            room = ''
+
+        if printRequest['computer'] is not None:
+            computer = "computer {}".format(printRequest['computer'])
+        else:
+            computer = ''
+
         path = os.path.join(settings.OUTPUT['OUTPUT_DIR'], fileName)
 
         cmd = command.format(
             path,
             printRequest['language'].lower().encode('utf-8'),
             remove_accents(printRequest['contest']),
-            printRequest['author'],
+            printRequest['author'] + ' ' + institute + ' ' + room +
+                                     ' ' + computer,
             title
         )
         proc = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)

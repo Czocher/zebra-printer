@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-#-*- coding: utf8 -*-
+# -*- coding: utf8 -*-
 
 from settings import NODE, SUPERVISOR
 from httplib import FORBIDDEN, NOT_FOUND, OK
