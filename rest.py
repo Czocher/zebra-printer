@@ -66,7 +66,7 @@ class RESTConnection(object):
         """Get a new print request for printing."""
 
         # Prepare the URL
-        url = 'printrequest/'
+        url = 'printrequest/for_printing/'
 
         response = cls.__get(url)
 
