@@ -68,14 +68,15 @@ class FileOutput(Output):
 
         cmd = command.format(
             path,
-            printRequest['language'].lower().encode('utf-8'),
+            printRequest['language'].lower(),
             remove_accents(printRequest['contest']),
             printRequest['author'] + ' ' + institute + ' '  + team +
                                      ' ' + room + ' ' + computer,
             title
         )
         proc = Popen(cmd, stdin=PIPE, stdout=PIPE, stderr=PIPE, shell=True)
-        proc.communicate(input=remove_accents(printRequest['source']))
+        source = remove_accents(printRequest['source']).encode('utf-8')
+        proc.communicate(input=source)
         proc.wait()
 
     def test(self):
@@ -96,7 +97,7 @@ class PrinterOutput(Output):
 
         self.__print(
             printer=settings.OUTPUT['PRINTER_NAME'],
-            language=printRequest['language'].lower().encode('utf-8'),
+            language=printRequest['language'].lower(),
             header=remove_accents(printRequest['contest']),
             footer=printRequest['author'] + ' ' + institute + ' ' + team +
                                             ' ' + room + ' ' + computer,
@@ -131,6 +132,6 @@ class PrinterOutput(Output):
                     source='Hello, world!'
                 )
                 decision = raw_input("Continue? (y/n) ")
-                print decision
+                print(decision)
                 if decision == 'n':
                     sys.exit(0)

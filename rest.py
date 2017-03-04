@@ -2,7 +2,7 @@
 # -*- coding: utf8 -*-
 
 from settings import NODE, SUPERVISOR
-from httplib import FORBIDDEN, NOT_FOUND, OK
+from six.moves.http_client import FORBIDDEN, NOT_FOUND, OK
 from sys import exit
 from requests import ConnectionError
 

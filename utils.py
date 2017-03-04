@@ -1,4 +1,5 @@
 from unidecode import unidecode
+from six import text_type
 import os
 
 
@@ -22,7 +23,7 @@ def which(program):
 
 
 def remove_accents(input_str):
-    return unidecode(unicode(input_str))
+    return unidecode(input_str)
 
 def get_key_or_substitute(dictionary, key, substitute):
     ret = dictionary.get(key)
