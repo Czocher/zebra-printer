@@ -121,7 +121,7 @@ class PrinterOutput(Output):
             raise UnsupportedOutputException("a2ps is required but "
                                              "does not exist on path")
         else:
-            decision = raw_input("Print test page? (y/n) ")
+            decision = input("Print test page? (y/n) ")
             if decision == 'y':
                 self.__print(
                     printer=settings.OUTPUT['PRINTER_NAME'],
